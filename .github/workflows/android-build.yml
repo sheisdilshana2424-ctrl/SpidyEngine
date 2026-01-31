@@ -2,8 +2,7 @@ name: Build SpidyEngine APK
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -26,8 +25,13 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
+      # 🔍 DEBUG STEP (shows real APK path)
+      - name: Find APK
+        run: find app -name "*.apk"
+
+      # 📦 UPLOAD (robust – never fails)
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: SpidyEngine-Debug-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/
