@@ -27,19 +27,22 @@ jobs:
         run: |
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
-      # REMOVED: chmod +x ./gradlew (Not needed anymore)
+      - name: Fix Gradle Wrapper
+        run: |
+          # Force generate a fresh wrapper for Gradle 8.2
+          gradle wrapper --gradle-version 8.2
+          chmod +x gradlew
 
       - name: Build Debug APK
-        # CHANGED: executing 'gradle' directly instead of './gradlew'
-        run: gradle :app:assembleDebug --no-daemon --stacktrace
+        run: ./gradlew :app:assembleDebug -x lint --stacktrace
 
       - name: Show APK files
         run: |
           echo "APK output:"
-          find app/build/outputs -type f -print || true
+          find app/build/outputs -type f -name "*.apk" || true
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: SpidyEngine-APK
-          path: app/build/outputs/apk/**/*.apk
+          path: app/build/outputs/apk/debug/*.apk
