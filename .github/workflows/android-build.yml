@@ -27,11 +27,11 @@ jobs:
         run: |
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
-      - name: Grant Gradle execute permission
-        run: chmod +x ./gradlew
+      # REMOVED: chmod +x ./gradlew (Not needed anymore)
 
       - name: Build Debug APK
-        run: ./gradlew :app:assembleDebug --no-daemon --stacktrace
+        # CHANGED: executing 'gradle' directly instead of './gradlew'
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
 
       - name: Show APK files
         run: |
